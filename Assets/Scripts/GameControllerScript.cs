@@ -14,6 +14,8 @@ public class GameControllerScript : MonoBehaviour
 
     public int tokensCollected;
 
+    public float gameTime = 10;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +29,24 @@ public class GameControllerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    }
+
+    public void FixedUpdate()
+    {
+        if (gameTime > 0)
+        {
+            gameTime -= Time.fixedDeltaTime;
+
+            if (gameTime <= 0)
+            {
+                DemonWon();
+            }
+        }
+    }
+
+    public void TurnOffLightsForMusicianTrigger()
+    {
+        StartCoroutine(TurnOffLightsForMusician());
     }
 
     IEnumerator TurnOffLightsForMusician()
@@ -78,19 +98,29 @@ public class GameControllerScript : MonoBehaviour
                 .Find("MusicoUITextWon")
                 .GetComponent<TextMeshProUGUI>()
                 .text = "¡Ganaste!";
-            GameObject
-                .Find("DemonUITextWon")
-                .GetComponent<TextMeshProUGUI>()
-                .text = "¡Ganaste!";
         }
         else
         {
             GameObject
                 .Find("DemonUITextWon")
                 .GetComponent<TextMeshProUGUI>()
-                .text = "¡Ganaste!";
+                .text = "¡Perdiste!";
+        }
+    }
+
+    public void DemonWon()
+    {
+        if (isThisPlayerMusician)
+        {
             GameObject
                 .Find("MusicoUITextWon")
+                .GetComponent<TextMeshProUGUI>()
+                .text = "¡Perdiste!";
+        }
+        else
+        {
+            GameObject
+                .Find("DemonUITextWon")
                 .GetComponent<TextMeshProUGUI>()
                 .text = "¡Ganaste!";
         }
